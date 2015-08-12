@@ -117,6 +117,14 @@ class Doctrine_Tokenizer_TestCase extends Doctrine_UnitTestCase
     {
         $tokenizer = new Doctrine_Query_Tokenizer();
 
+        $str = "(1=2) OR (2=2)";
+        $a   = $tokenizer->bracketExplode($str, array('OR'), '(', ')');
+        $this->assertEqual($a, array('(1=2)', '(2=2)'));
+
+        $str = "(1=2)OR(2=2)";
+        $a   = $tokenizer->bracketExplode($str, array('OR'), '(', ')');
+        $this->assertEqual($a, array('(1=2)', '(2=2)'));
+
         $str = 'foo.field AND bar.field';
         $a   = $tokenizer->bracketExplode($str, array(' \&\& ', ' AND '), '(', ')');
         $this->assertEqual($a, array('foo.field', 'bar.field'));
