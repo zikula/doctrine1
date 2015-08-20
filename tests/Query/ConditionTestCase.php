@@ -116,4 +116,89 @@ class Doctrine_Query_Condition_TestCase extends Doctrine_UnitTestCase
         $query->where("(((((User.name LIKE 'z%') OR User.name LIKE 's%')) AND User.name LIKE 'a%'))");
         $this->assertEqual($query->getSqlQuery(), $sql);
     }
+
+    public function testConditionParserWithNoSpacesForOR()
+    {
+        $query = new Doctrine_Query($this->connection);
+
+        $query->select('User.id')->from('User')
+            ->where('33=55')
+            ->andWhere('(1=2)OR(2=2)');
+
+        $sql = 'SELECT e.id AS e__id FROM entity e WHERE (33 = 55 AND (1 = 2 OR 2 = 2) AND (e.type = 0))';
+        $this->assertEqual($query->getSqlQuery(), $sql);
+
+
+        $query = new Doctrine_Query($this->connection);
+
+        $query->select('User.id')->from('User')
+            ->where('33=55')
+            ->andWhere("(1=2) OR\n(2=2)");
+
+        $sql = 'SELECT e.id AS e__id FROM entity e WHERE (33 = 55 AND (1 = 2 OR 2 = 2) AND (e.type = 0))';
+        $this->assertEqual($query->getSqlQuery(), $sql);
+
+
+         $query = new Doctrine_Query($this->connection);
+
+        $query->select('User.id')->from('User')
+            ->where('33=55')
+            ->andWhere("(1=2)\n\tOR (2=2)");
+
+        $sql = 'SELECT e.id AS e__id FROM entity e WHERE (33 = 55 AND (1 = 2 OR 2 = 2) AND (e.type = 0))';
+        $this->assertEqual($query->getSqlQuery(), $sql);
+
+
+        $query = new Doctrine_Query($this->connection);
+
+        $query->select('User.id')->from('User')
+            ->where('33=55')
+            ->andWhere('(1=2)OR(2=2)');
+
+        $sql = 'SELECT e.id AS e__id FROM entity e WHERE (33 = 55 AND (1 = 2 OR 2 = 2) AND (e.type = 0))';
+        $this->assertEqual($query->getSqlQuery(), $sql);
+    }
+
+    public function testConditionParserWithNoSpacesForAND()
+    {
+        $query = new Doctrine_Query($this->connection);
+
+        $query->select('User.id')->from('User')
+            ->where('33=55')
+            ->orWhere('(1=1)AND(2=2)');
+
+        $sql = 'SELECT e.id AS e__id FROM entity e WHERE (33 = 55 OR (1 = 1 AND 2 = 2) AND (e.type = 0))';
+        $this->assertEqual($query->getSqlQuery(), $sql);
+
+
+        $query = new Doctrine_Query($this->connection);
+
+        $query->select('User.id')->from('User')
+            ->where('33=55')
+            ->orWhere("(1=1) AND\n(2=2)");
+
+        $sql = 'SELECT e.id AS e__id FROM entity e WHERE (33 = 55 OR (1 = 1 AND 2 = 2) AND (e.type = 0))';
+        $this->assertEqual($query->getSqlQuery(), $sql);
+
+
+        $query = new Doctrine_Query($this->connection);
+
+        $query->select('User.id')->from('User')
+            ->where('33=55')
+            ->orWhere("(1=1)\n\tAND (2=2)");
+
+        $sql = 'SELECT e.id AS e__id FROM entity e WHERE (33 = 55 OR (1 = 1 AND 2 = 2) AND (e.type = 0))';
+        $this->assertEqual($query->getSqlQuery(), $sql);
+
+
+        $query = new Doctrine_Query($this->connection);
+
+        $query->select('User.id')->from('User')
+            ->where('33=55')
+            ->orWhere('(1=1)AND(2=2)');
+
+        $sql = 'SELECT e.id AS e__id FROM entity e WHERE (33 = 55 OR (1 = 1 AND 2 = 2) AND (e.type = 0))';
+        $this->assertEqual($query->getSqlQuery(), $sql);
+    }
+
 }

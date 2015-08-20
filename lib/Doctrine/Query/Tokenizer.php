@@ -302,7 +302,7 @@ class Doctrine_Query_Tokenizer
         foreach ($d as $key => $string) {
             $escapedString = preg_quote($string);
             if (preg_match('#^\w+$#', $string)) {
-                $escapedString = "\W$escapedString\W";
+                $escapedString = "(?<=\W)$escapedString(?=\W)";
             }
             $d[$key] = $escapedString;
         }
