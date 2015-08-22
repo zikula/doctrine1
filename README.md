@@ -1,5 +1,8 @@
 # Doctrine 1 fork
 
+[![Build status](https://travis-ci.org/zikula/doctrine1.svg?branch=master)](https://travis-ci.org/zikula/doctrine1)
+[![Total Downloads](https://img.shields.io/packagist/dt/drak/doctrine1.svg)](https://packagist.org/packages/drak/doctrine1)
+
 This is a maintained Doctrine 1 fork you can use in your projects using Composer.
 
 There are two versions: `dev` and `master`.
