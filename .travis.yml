@@ -6,3 +6,8 @@ php:
   - hhvm
   - nightly
 script: cd tests && php run.php
+matrix:
+  allow_failures:
+    - php: hhvm
+    - php: nightly
+  fast_finish: true
