@@ -149,6 +149,44 @@ class Doctrine_Connection_Mysql extends Doctrine_Connection_Common
     }
 
     /**
+     * return version information about the server
+     *
+     * @param bool $native    determines if the raw version string should be returned
+     * @return array|string     an array or string with version information
+     */
+    public function getServerVersion($native = false)
+    {
+        $query = 'SELECT VERSION()';
+
+        $serverInfo = $this->fetchOne($query);
+
+        if ( ! $native) {
+            $tmp = explode('.', $serverInfo, 3);
+
+            if (empty($tmp[2]) && isset($tmp[1])
+                && preg_match('/(\d+)(.*)/', $tmp[1], $tmp2)
+            ) {
+                $serverInfo = array(
+                    'major' => $tmp[0],
+                    'minor' => $tmp2[1],
+                    'patch' => null,
+                    'extra' => $tmp2[2],
+                    'native' => $serverInfo,
+                );
+            } else {
+                $serverInfo = array(
+                    'major' => isset($tmp[0]) ? $tmp[0] : null,
+                    'minor' => isset($tmp[1]) ? $tmp[1] : null,
+                    'patch' => isset($tmp[2]) ? $tmp[2] : null,
+                    'extra' => null,
+                    'native' => $serverInfo,
+                );
+            }
+        }
+        return $serverInfo;
+    }
+
+    /**
      * Execute a SQL REPLACE query. A REPLACE query is identical to a INSERT
      * query, except that if there is already a row in the table with the same
      * key field values, the REPLACE query just updates its values instead of
